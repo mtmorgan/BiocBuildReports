@@ -1,12 +1,16 @@
 Package: BiocBuildReports
-Title: What the Package Does (one line, title case)
+Title: Summarize Bioconductor nightly builds and (reverse) dependencies
 Version: 0.0.1
 Authors@R:
     person(
         "Martin", "Morgan", email = "MartinMorgan@RoswellPark.org",
         role = c("aut", "cre")
     )
-Description: What the package does (one paragraph).
+Description: Bioconductor builds all packages in the 'devel' and
+    current release branches on a nightly basis. This package scrapes
+    the build report to summarize overall builds. It includes
+    facilities for easily tracking the outcome of recent commits, as
+    well as consequences of commits for package reverse dependencies.
 Depends: R (>= 3.5.0)
 Imports: httr, tibble, xml2, dplyr, lubridate
 License: Artistic-2.0
