@@ -1,11 +1,11 @@
+library(lubridate)
+library(tidyverse)
 devtools::load_all()
 
 rpt <- report()
 summary(rpt)
-filter(rpt, commit > snapshot_date(rpt) - days(1)) %>%
-    select(-commit, -url, -install) %>% arrange(buildsrc, checksrc, push)
-(versions <- filter(rpt, push == "NO"))
-
+filter_recent(rpt) %>% print(n=nrow(.))
+(versions <- filter(rpt, push %in% "NO"))
 save_report(rpt, "./reports")
 
 VIEWS <- "https://bioconductor.org/packages/devel/bioc/VIEWS"

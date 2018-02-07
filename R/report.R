@@ -41,7 +41,7 @@ report <- function(release = "3.7", host = "malbec2") {
     status <- lapply(classes, function(class) {
         path <- sprintf("//td[@class='%s']//text()", class)
         values <- as.character(xml_find_all(report, path))
-        gsub(" +", " ", iconv(values, to = "ASCII", sub = " "))
+        trimws(gsub(" +", " ", iconv(values, to = "ASCII", sub = " ")))
     })
     status$buildsrc <- factor(
         status$buildsrc,
@@ -119,4 +119,12 @@ summary.report <- function(object, ...) {
     )
     object <- group_by(object, buildsrc, checksrc, push)
     summarize(object, n=n())
+}
+
+#' @importFrom lubridate days
+#' @export
+filter_recent <- function(rpt, days_ago = days(1)) {
+    filter(rpt, commit > snapshot_date(rpt) - days_ago) %>%
+        select(-commit, -url, -install) %>%
+        arrange(buildsrc, checksrc, push)
 }
