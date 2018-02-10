@@ -106,22 +106,37 @@ load_report <- function(dir = ".", when = format(Sys.time(), "%F")) {
     readRDS(file)
 }
 
+.print_header <- function(x) {
+    cat(
+        "release: ", metadata(x)$release, "\n",
+        "host: ", metadata(x)$host, "\n",
+        "snapshot_date(): ", format(snapshot_date(x), "%F"),
+            " (", weekdays(snapshot_date(x)), ")\n",
+        sep=""
+    )
+}
+
+#' @exportMethod print
+print.report <- function(x, ...) {
+    .print_header(x)
+    NextMethod(x)
+}
+
 globalVariables(c("buildsrc", "checksrc", "push"))
 
 #' @importFrom dplyr group_by summarize n
 #' @exportMethod summary
 summary.report <- function(object, ...) {
-    cat(
-        "release: ", metadata(object)$release, "\n",
-        "host: ", metadata(object)$host, "\n",
-        "snapshot_date(): ", format(snapshot_date(object), "%F"), "\n",
-        sep=""
-    )
     object <- group_by(object, buildsrc, checksrc, push)
+    .print_header(object)
     summarize(object, n=n())
 }
 
+globalVariables(c("commit", "url", "install"))
+
 #' @importFrom lubridate days
+#' @importFrom dplyr filter arrange select
+#' @importFrom magrittr "%>%"
 #' @export
 filter_recent <- function(rpt, days_ago = days(1)) {
     filter(rpt, commit > snapshot_date(rpt) - days_ago) %>%

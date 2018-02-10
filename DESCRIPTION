@@ -12,7 +12,7 @@ Description: Bioconductor builds all packages in the 'devel' and
     facilities for easily tracking the outcome of recent commits, as
     well as consequences of commits for package reverse dependencies.
 Depends: R (>= 3.5.0)
-Imports: httr, tibble, xml2, dplyr, lubridate
+Imports: httr, tibble, xml2, dplyr, magrittr, lubridate
 License: Artistic-2.0
 Encoding: UTF-8
 LazyData: true
